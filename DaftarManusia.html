@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Tugas Daftar Manusia || Angga Radifan Sumarna </title>
+    <style>
+        table ,tr,td, tbody {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 20px;
+            margin: 10px;
+            
+        }
+    </style>
+</head>
+
+<body>
+    <center>
+        <h1>Daftar Manusia</h1>
+        <table>
+            <tr>
+                <td><input type="text" name="nama" placeholder="Masukkan nama">
+                    <br><br>
+                    <input type="text" name="usia" placeholder="Masukkan usia">
+                    <br><br>
+                    Kelamin :
+                    <input type="radio" id="g1" name="gender" value="Pria"> Pria
+                    <input type="radio" id="g2" name="gender" value="Wanita"> Wanita
+                    <br><br>
+                    <input type="text" name="pekerjaan" placeholder="Masukkan pekerjaan">
+                    <br><br>
+                    <input type="button" onclick="AddData()" value="Add">
+                    <br><br>
+                    Sort Berdasarkan:
+                    <br>
+                    <input type="button" onclick="sortNama()" value="Nama">
+                    <input type="button" onclick="sortUsia()" value="Usia">
+                    <input type="button" onclick="sortKelamin()" value="Kelamin">
+                    <input type="button" onclick="sortPekerjaan()" value="Pekerjaan">
+                </td>
+            </tr>
+        </table>
+        <br>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nama</th>
+                    <th>Usia</th>
+                    <th>Kelamin</th>
+                    <th>Pekerjaan</th>
+                </tr>
+            </thead>
+
+            <tbody id='isiTable'>
+
+            </tbody>
+        </table>
+        <h2> </h2>
+    </center>
+
+    <script>
+        var data = []
+        class Orang {
+            constructor(nama, usia, kelamin, pekerjaan) {
+                this.nama = nama;
+                this.usia = usia;
+                this.kelamin = kelamin;
+                this.pekerjaan = pekerjaan
+            }
+        }
+        // function cekKelamin(){
+        //     // var kelamin = document.getElementsByName('gender')
+        //     // var valueKelamin;
+        //     // for (var i = 0; i < kelamin.length; i++) {
+        //     //     if (kelamin[i].checked) {
+        //     //         valueKelamin = kelamin[i].value
+        //     //     }
+        //     // }
+        //     // return valueKelamin
+
+        //     return kelamin
+        // }
+
+        function AddData() {
+            var selektor = document.getElementsByTagName('input')
+            var nama = selektor[0].value
+            var usia = selektor[1].value
+            var kelamin;
+            if (selektor[2].checked) {
+                kelamin = document.getElementById("g1").value
+            } else if (selektor[3].checked) {
+                kelamin = document.getElementById("g2").value
+            }
+            var pekerjaan = selektor[4].value
+
+            if (nama == '' || usia == '' || kelamin.checked == false || pekerjaan == '') {
+                document.getElementsByTagName('h2')[0].style.color = 'red'
+                document.getElementsByTagName('h2')[0].innerHTML = 'harus diisi woi'
+            } else {
+                document.getElementsByTagName('h2')[0].innerHTML = ''
+                var newMan = new Orang(nama, usia, kelamin, pekerjaan)
+                data.push(newMan)
+                showData(data)
+            }
+            for (var i = 0; i < 5; i++) {
+                if (i !== 2 && i !== 3) {
+                    selektor[i].value = ''
+                } else {
+                    selektor[i].checked = false
+                }
+
+            }
+        }
+
+        function showData(arr) {
+            var tampil = ''
+            for (var i = 0; i < arr.length; i++) {
+                tampil +=
+                    `<tr>
+                                <td>${arr[i].nama}</td>
+                                <td>${arr[i].usia}</td>
+                                <td>${arr[i].kelamin}</td>
+                                <td>${arr[i].pekerjaan}</td>
+                            </tr>`
+            }
+            document.getElementById('isiTable').innerHTML = tampil
+        }
+
+        function sortNama() {
+            function compare(a,b) {
+                // Use toUpperCase() to ignore character casing
+                const namaA = a.nama.toUpperCase();
+                const namaB = b.nama.toUpperCase();
+
+                let comparison = 0;
+                if (namaA > namaB) {
+                    comparison = 1;
+                } else if (namaA < namaB) {
+                    comparison = -1;
+                }
+                return comparison;
+            }
+
+            var sortedData = data.sort(compare);
+            showData(sortedData)
+        }
+
+        function sortUsia() {
+            function compare(a, b) {
+                const usiaA = a.usia;
+                const usiaB = b.usia;
+
+                let comparison = 0;
+                if (usiaA > usiaB) {
+                    comparison = 1;
+                } else if (usiaA < usiaB) {
+                    comparison = -1;
+                }
+                return comparison;
+            }
+
+            var sortedAge = data.sort(compare);
+            showData(sortedAge)
+        }
+
+        function sortKelamin(){
+            function compare(a,b){
+                const kelaminA = a.kelamin
+                const kelaminB = b.kelamin
+
+                let comparison = 0
+                if (kelaminA > kelaminB){
+                    comparison = 1
+                } else if (kelaminA < kelaminB){
+                    comparison = -1
+                }
+                return comparison
+            }
+            var sortedGender = data.sort(compare)
+            showData(sortedGender)
+        }
+
+        function sortPekerjaan(){
+            function compare(a,b){
+                const jobsA = a.pekerjaan
+                const jobsB = b.pekerjaan
+
+                let comparison = 0
+                if (jobsA > jobsB){
+                    comparison = 1
+                } else if (jobsA < jobsB){
+                    comparison = -1
+                }
+                return comparison
+            }
+            var sortedJobs = data.sort(compare)
+            showData(sortedJobs)
+        }
+    </script>
+</body>
+
+</html>
